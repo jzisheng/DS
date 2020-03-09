@@ -26,14 +26,17 @@ def predictDuplicateByUser(df,accountNumber):
     merchants = np.unique(duplicateTxs['merchantName'])
     
     results = []
+    chargeBackResults = []
     for merchant in merchants:
         mask = (duplicateTxs['merchantName']==merchant)
         byMerchantDf = duplicateTxs[mask]
         duplicateFlags = predictDuplicates(byMerchantDf)
-        chargebackFlags = predictChargebacks(byMerchantDf)
+        #chargebackFlags = predictChargebacks(byMerchantDf)
         results.append(byMerchantDf[duplicateFlags])
+        #results.append(byMerchantDf[chargebackFlags])
         pass
-    return pd.concat(results)
+    if(len(results)>1):
+        return results
 
 """
 Method for predicting duplicates
@@ -44,7 +47,7 @@ Method for predicting duplicates
 def predictDuplicates(df):
     df.sort_values('transactionDateTime')
     delta = df['transactionDateTime'].diff()
-    return ((delta.dt.seconds < 1800) & (df.transactionType=='PURCHASE'))
+    return ((delta.dt.seconds < 5000) & (df.transactionType=='PURCHASE'))
 
 
 def predictChargebacks(df):
