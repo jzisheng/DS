@@ -52,7 +52,6 @@ def predictChargebacks(df):
     mask = (df.transactionType == 'REVERSAL')
     cols = ['transactionDateTime','transactionAmount',
             'currentBalance','transactionType','merchantName']
-    print(df[cols])
     pass
                                    
 """

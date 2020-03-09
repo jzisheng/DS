@@ -15,7 +15,6 @@ class DfDataset(Dataset):
         """
         self.transform2d = transform2d
         self.data = df
-        self.to_tensor = transforms.ToTensor()
         self.labels = np.asarray(self.data['isFraud']).astype('float')
         self.cols = ['transactionAmount', 'hourDelta',
                      'transactionAmountMedian', 'transactionAmountMean',
