@@ -8,7 +8,7 @@ from torch.autograd import Variable
 from torch.utils.data.dataset import Dataset  # For custom datasets
 
 class DfDataset(Dataset):
-    def __init__(self, df,transform2d=False):
+    def __init__(self, df,transform2d=True):
         """
         Args:
             df (pd.DataFrame) dataframe to iterate over
@@ -32,7 +32,11 @@ class DfDataset(Dataset):
         label = torch.tensor(self.labels[index])
         dfRow = self.data.iloc[index]
         dfX = (dfRow.values)
-        dfRow = np.array([np.pad(dfX,(0,3),'constant',constant_values=(0)).reshape(5,5)])
+        if self.transform2d:
+            dfRow = np.array([np.pad(dfX,(0,3),'constant',
+                                     constant_values=(0)).reshape(5,5)])
+        else:
+            dfRow = np.array([dfX])
         data_as_tensor = torch.tensor(dfRow).float()
         return (data_as_tensor, label)
         
